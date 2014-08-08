@@ -1,9 +1,11 @@
-Avast, Ye Pirates: Write a Web App Code Lab
-============================
+Dart Web App Code Lab
+=====================
 
 [![Build Status](https://drone.io/github.com/dart-lang/one-hour-codelab/status.png)](https://drone.io/github.com/dart-lang/one-hour-codelab/latest)
 
 These are small Dart samples used by the [Avast Ye, Pirates][codelab], in which you learn to build and web app, and which takes about an hour to complete.
+
+FYI: Step 4's online directions are missing a line that needs to be added to the PirateName class.
 
 Repo and testing
 ----------------
@@ -15,9 +17,6 @@ Project structure
 
 **web/:**
         Code samples used by the Avast Ye, Pirates code lab. Contains sub-directories to organize the samples by step.
-
-**README.md:**
-        This file.
 
 **runtests.sh:**
 	BASH script that runs dartanalyzer on all Dart source files in the web directory.
