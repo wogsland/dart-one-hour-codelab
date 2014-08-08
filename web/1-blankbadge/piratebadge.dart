@@ -1,7 +1,11 @@
 // Copyright (c) 2012, the Dart project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
+
+// import the things to build with...
+// supposedly "code bloat is not an issue because of tree-shaking"
 import 'dart:html';
+import 'dart:math' show Random; //but here we're only grabbing one class
 
 //vars
 ButtonElement genButton;
@@ -36,3 +40,13 @@ void setBadgeName(String newName) {
 void generateBadge(Event e) {
   setBadgeName('Inigo Montoya. You killed my father; prepare to die.');
 }
+
+/* These comments work, too */
+class PirateName {
+  static final Random indexGen = new Random();
+  String _firstName; // The underscore is how one makes variables private. Weird.
+  String _appellation; // (not the mountains)
+  static final List names = ['Jor','Lara','Kal','John','Martha','Clark'];
+  static final List appellations = ['El','Kent'];
+}
+
