@@ -6,21 +6,38 @@
 // supposedly "code bloat is not an issue because of tree-shaking"
 import 'dart:html';
 import 'dart:math' show Random; //but here we're only grabbing one class
-import 'dart:convert' show JSON; //sure, the syntax is all Java, but we still like JSONs
+import 'dart:convert' show JSON; //sure, the syntax is all Java, but we still like Javascript Object Notation
+import 'dart:async' show Future;
 
 //vars & constants
 ButtonElement genButton;
+SpanElement badgeNameElement;
 final String TREASURE_KEY = 'pirateName';
 
 //funkytowns
 void main() {
   // input box
-  querySelector('#inputName').onInput.listen(updateBadge);
+  //querySelector('#inputName').onInput.listen(updateBadge);
+  InputElement inputField = querySelector('#inputName');
+  inputField.onInput.listen(updateBadge);
   
   // button
   genButton = querySelector('#generateButton');
   genButton.onClick.listen(generateBadge);
-  setBadgeName(getBadgeNameFromStorage());
+  badgeNameElement = querySelector('#badgeName');
+  
+  // look for names in JSON file
+  PirateName.readyThePirates()
+    .then((_) {
+      //file found
+      inputField.disabled = false; //enables
+      genButton.disabled = false; //enables
+      setBadgeName(getBadgeNameFromStorage());
+    })
+    .catchError((arrr) {
+      print('Error getting JSON file: $arrr');
+      badgeNameElement.text = "No nameses :("; //Gollum always uses emoji
+    });
 }
 
 void updateBadge(Event e) {
@@ -65,8 +82,10 @@ class PirateName {
   static final Random indexGen = new Random();
   String _firstName; // The underscore is how one makes variables private. Weird.
   String _appellation; // (not the mountains)
-  static final List names = ['Jor','Lara','Kal','John','Martha','Clark'];
-  static final List appellations = ['El','Kent'];
+  //static final List names = ['Jor','Lara','Kal','John','Martha','Clark'];
+  //static final List appellations = ['El','Kent'];
+  static List<String> names = [];
+  static List<String> appellations = [];
   
   // constructors
   PirateName({String firstName, String appellation}) {
@@ -87,11 +106,18 @@ class PirateName {
     _appellation = storedName['a'];
   }
   
-  
-  
   // other methods
   String toString() => pirateName; //mission critical line left out of tutorial
   String get pirateName => _firstName.isEmpty ? '' : '$_firstName the $_appellation';
   String get jsonString => JSON.encode({"f": _firstName, "a": _appellation});
+  static Future readyThePirates() {
+    var path = 'piratenames.json';
+    return HttpRequest.getString(path).then(_parsePirateNamesFromJSON);
+  }
+  static _parsePirateNamesFromJSON(String jsonString) {
+    Map pirateNames = JSON.decode(jsonString);
+    names = pirateNames['names'];
+    appellations = pirateNames['appellations'];
+  }
 }
 
