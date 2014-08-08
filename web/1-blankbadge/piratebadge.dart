@@ -23,7 +23,7 @@ void main() {
 void updateBadge(Event e) {
   //querySelector('#badgeName').text = (e.target as InputElement).value;
   String inputName = (e.target as InputElement).value;
-  setBadgeName(inputName);
+  setBadgeName(new PirateName(firstName: inputName));
   if (inputName.trim().isEmpty) {
     genButton..disabled = false
              ..text = "Now, tell us it's nameses!";
@@ -33,20 +33,42 @@ void updateBadge(Event e) {
   }
 }
 
-void setBadgeName(String newName) {
-  querySelector('#badgeName').text = newName;
+void setBadgeName(PirateName newName) {
+  querySelector('#badgeName').text = newName.pirateName;
 }
 
 void generateBadge(Event e) {
-  setBadgeName('Inigo Montoya. You killed my father; prepare to die.');
+  //setBadgeName('Inigo Montoya. You killed my father; prepare to die.');
+  setBadgeName(new PirateName());
 }
 
 /* These comments work, too */
 class PirateName {
+  
+  // vars and constants
   static final Random indexGen = new Random();
   String _firstName; // The underscore is how one makes variables private. Weird.
   String _appellation; // (not the mountains)
   static final List names = ['Jor','Lara','Kal','John','Martha','Clark'];
   static final List appellations = ['El','Kent'];
+  
+  // constructor
+  PirateName({String firstName, String appellation}) {
+    if (firstName == null) {
+      _firstName = names[indexGen.nextInt(names.length)];
+    } else {
+      _firstName = firstName;
+    }
+    if (appellation == null) {
+      _appellation = appellations[indexGen.nextInt(appellations.length)];
+    } else {
+      _appellation = appellation;
+    }
+  }
+  
+  String toString() => pirateName; //mission critical line left out of tutorial
+  
+  // other methods
+  String get pirateName => _firstName.isEmpty ? '' : '$_firstName the $_appellation';
 }
 
